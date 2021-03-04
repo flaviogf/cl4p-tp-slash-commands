@@ -1,0 +1,31 @@
+{
+  "name": "cl4p-tp-slash-commands",
+  "version": "1.0.0",
+  "main": "src/index.ts",
+  "repository": "git@github.com:flaviogf/cl4p-tp-slash-commands.git",
+  "author": "flaviogf <flavio.fernandes6@gmail.com>",
+  "license": "MIT",
+  "devDependencies": {
+    "@types/express": "4.17.11",
+    "@typescript-eslint/eslint-plugin": "4.16.1",
+    "@typescript-eslint/parser": "4.16.1",
+    "eslint": "7.21.0",
+    "eslint-config-prettier": "8.1.0",
+    "eslint-config-standard": "16.0.2",
+    "eslint-plugin-import": "2.22.1",
+    "eslint-plugin-node": "11.1.0",
+    "eslint-plugin-promise": "4.3.1",
+    "ts-node": "9.1.1",
+    "typescript": "4.2.2"
+  },
+  "scripts": {
+    "prestart": "yarn",
+    "start": "ts-node src/index.ts"
+  },
+  "dependencies": {
+    "axios": "0.21.1",
+    "discord-interactions": "2.0.2",
+    "dotenv": "8.2.0",
+    "express": "4.17.1"
+  }
+}

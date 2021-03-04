@@ -1,0 +1,29 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: cl4p-tp-deployment
+  labels:
+    app: cl4p-tp
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: cl4p-tp
+  template:
+    metadata:
+      labels:
+        app: cl4p-tp
+    spec:
+      containers:
+        - name: cl4p-tp
+          image: flaviogf/cl4p-tp
+          imagePullPolicy: "Always"
+          ports:
+            - containerPort: 3000
+          envFrom:
+            - configMapRef:
+                name: cl4p-tp-config-map
+          readinessProbe:
+            httpGet:
+              path: /cl4p-tp
+              port: 3000
