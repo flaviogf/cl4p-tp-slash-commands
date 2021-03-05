@@ -26,12 +26,12 @@ routes.post('/interactions', verifyKeyMiddleware(String(process.env.PUBLIC_KEY))
       const response = await axios.get(url)
 
       return `\`\`\`json
-${JSON.stringify(response.data)}
+${JSON.stringify(response.data, null, 2)}
 \`\`\`
       `
     } catch (err) {
       return `\`\`\`json
-${JSON.stringify(err)}
+${JSON.stringify(err, null, 2)}
 \`\`\`
       `
     }
