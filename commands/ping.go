@@ -3,32 +3,24 @@ package commands
 import (
 	"encoding/json"
 	"fmt"
-	"io/ioutil"
 	"net/http"
 )
-
-type Logger interface {
-	Printf(format string, v ...interface{})
-}
 
 type HttpClient interface {
 	Get(url string) (*http.Response, error)
 }
 
 type PingCommand struct {
-	logger Logger
-	http   HttpClient
+	http HttpClient
 }
 
-func NewPingCommand(logger Logger, http HttpClient) *PingCommand {
-	return &PingCommand{logger, http}
+func NewPingCommand(http HttpClient) *PingCommand {
+	return &PingCommand{http}
 }
 
 func (p *PingCommand) Execute(interaction Interaction) InteractionResponse {
-	p.logger.Printf("executing ping command\n")
-
 	if len(interaction.Data.Options) == 0 {
-		return NewEmbed(4437377, "Fail", "you must specify an option")
+		return NewEmbedInteractionResponse(14500161, "Fail", "you must specify an option")
 	}
 
 	url := interaction.Data.Options[0].Value
@@ -36,18 +28,10 @@ func (p *PingCommand) Execute(interaction Interaction) InteractionResponse {
 	resp, err := http.Get(url)
 
 	if err != nil {
-		return NewEmbed(4437377, "Fail", err.Error())
+		return NewEmbedInteractionResponse(14500161, "Fail", err.Error())
 	}
 
-	if resp.StatusCode != http.StatusOK {
-		return NewEmbed(4437377, "Fail", "something went wrong")
-	}
-
-	bytes, err := ioutil.ReadAll(resp.Body)
-
-	if err != nil {
-		return NewEmbed(4437377, "Fail", err.Error())
-	}
+	decoder := json.NewDecoder(resp.Body)
 
 	body := struct {
 		Content    string `json:"content"`
@@ -57,19 +41,15 @@ func (p *PingCommand) Execute(interaction Interaction) InteractionResponse {
 		Env        string `json:"env"`
 	}{}
 
-	err = json.Unmarshal(bytes, &body)
+	err = decoder.Decode(&body)
 
 	if err != nil {
-		return NewEmbed(4437377, "Fail", err.Error())
+		return NewEmbedInteractionResponse(14500161, "Fail", err.Error())
 	}
 
-	prettyJson, err := json.MarshalIndent(body, "", "\t")
+	content, _ := json.MarshalIndent(body, "", "\t")
 
-	if err != nil {
-		return NewEmbed(4437377, "Fail", err.Error())
-	}
+	description := fmt.Sprintf("```json\n%s\n```", string(content))
 
-	description := fmt.Sprintf("```json\n%s\n```", string(prettyJson))
-
-	return NewEmbed(4437377, "OK", description)
+	return NewEmbedInteractionResponse(4437377, "Pong", description)
 }
