@@ -17,5 +17,9 @@ spec:
       containers:
         - name: cl4p-tp-slash-commands
           image: flaviogf/cl4p-tp-slash-commands
+          imagePullPolicy: Never
+          envFrom:
+          - configMapRef:
+              name: cl4p-tp-slash-commands-config-map
           ports:
             - containerPort: 8080
