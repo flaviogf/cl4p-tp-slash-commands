@@ -28,7 +28,7 @@ func (p *PingCommand) Execute(interaction Interaction) InteractionResponse {
 	p.logger.Printf("executing ping command\n")
 
 	if len(interaction.Data.Options) == 0 {
-		return NewInteractionResponseWithEmbed(4437377, "Fail", "you must specify an option")
+		return NewEmbed(4437377, "Fail", "you must specify an option")
 	}
 
 	url := interaction.Data.Options[0].Value
@@ -36,17 +36,17 @@ func (p *PingCommand) Execute(interaction Interaction) InteractionResponse {
 	resp, err := http.Get(url)
 
 	if err != nil {
-		return NewInteractionResponseWithEmbed(4437377, "Fail", err.Error())
+		return NewEmbed(4437377, "Fail", err.Error())
 	}
 
 	if resp.StatusCode != http.StatusOK {
-		return NewInteractionResponseWithEmbed(4437377, "Fail", "something went wrong")
+		return NewEmbed(4437377, "Fail", "something went wrong")
 	}
 
 	bytes, err := ioutil.ReadAll(resp.Body)
 
 	if err != nil {
-		return NewInteractionResponseWithEmbed(4437377, "Fail", err.Error())
+		return NewEmbed(4437377, "Fail", err.Error())
 	}
 
 	body := struct {
@@ -60,16 +60,16 @@ func (p *PingCommand) Execute(interaction Interaction) InteractionResponse {
 	err = json.Unmarshal(bytes, &body)
 
 	if err != nil {
-		return NewInteractionResponseWithEmbed(4437377, "Fail", err.Error())
+		return NewEmbed(4437377, "Fail", err.Error())
 	}
 
 	prettyJson, err := json.MarshalIndent(body, "", "\t")
 
 	if err != nil {
-		return NewInteractionResponseWithEmbed(4437377, "Fail", err.Error())
+		return NewEmbed(4437377, "Fail", err.Error())
 	}
 
 	description := fmt.Sprintf("```json\n%s\n```", string(prettyJson))
 
-	return NewInteractionResponseWithEmbed(4437377, "OK", description)
+	return NewEmbed(4437377, "OK", description)
 }
