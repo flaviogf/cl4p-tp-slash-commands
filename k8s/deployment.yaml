@@ -1,0 +1,21 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: cl4p-tp-slash-commands-deployment
+  labels:
+    app: cl4p-tp-slash-commands
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: cl4p-tp-slash-commands
+  template:
+    metadata:
+      labels:
+        app: cl4p-tp-slash-commands
+    spec:
+      containers:
+        - name: cl4p-tp-slash-commands
+          image: flaviogf/cl4p-tp-slash-commands
+          ports:
+            - containerPort: 8080
