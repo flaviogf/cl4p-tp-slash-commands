@@ -48,6 +48,10 @@ type Embed struct {
 	Description string `json:"description"`
 }
 
-func NewInteractionResponseWithEmbed(color int, title, description string) InteractionResponse {
-	return InteractionResponse{Data: InteractionApplicationCommandCallbackData{Embed: Embed{color, title, description}}}
+func NewPong() InteractionResponse {
+	return InteractionResponse{Type: Pong}
+}
+
+func NewEmbed(color int, title, description string) InteractionResponse {
+	return InteractionResponse{Type: ChannelMessageWithSource, Data: InteractionApplicationCommandCallbackData{Embed: Embed{color, title, description}}}
 }
