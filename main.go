@@ -9,20 +9,9 @@ import (
 	"time"
 
 	"github.com/flaviogf/cl4p-tp-slash-commands/commands"
-	"github.com/spf13/viper"
 )
 
 func main() {
-	viper.SetConfigFile(".env")
-
-	viper.ReadInConfig()
-
-	viper.SetDefault("PORT", "8080")
-
-	viper.SetDefault("PUBLIC_KEY", "YOUR_PUBLIC_KEY")
-
-	viper.AutomaticEnv()
-
 	logger := log.New(os.Stdout, "", log.LstdFlags|log.Lshortfile)
 
 	pingCommand := commands.NewPingCommand(logger, http.DefaultClient)
@@ -50,7 +39,7 @@ func main() {
 
 		timestamp := r.Header.Get("X-Signature-Timestamp")
 
-		publicKey := viper.GetString("PUBLIC_KEY")
+		publicKey := os.Getenv("PUBLIC_KEY")
 
 		if !verify(signature, timestamp+string(rawBody), publicKey) {
 			rw.WriteHeader(http.StatusUnauthorized)
@@ -103,7 +92,7 @@ func main() {
 		encoder.Encode(response)
 	})
 
-	port := viper.GetString("PORT")
+	port := os.Getenv("PORT")
 
 	logger.Printf("starting cl4p-tp-slash-commands at %s\n", ":"+port)
 
