@@ -1,3 +1,3 @@
-module github.com/flaviogf/cl4p-tp-slash-commands
+module github.com/flaviogf/cl4p-tp
 
 go 1.16

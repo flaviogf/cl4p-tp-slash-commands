@@ -1,7 +1,7 @@
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: cl4p-tp-slash-commands-config-map
+  name: cl4p-tp-config-map
 data:
-  PORT: "8080"
+  PORT: "3000"
   PUBLIC_KEY: "YOUR_PUBLIC_KEY"

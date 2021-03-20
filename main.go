@@ -8,7 +8,7 @@ import (
 	"os"
 	"time"
 
-	"github.com/flaviogf/cl4p-tp-slash-commands/commands"
+	"github.com/flaviogf/cl4p-tp/commands"
 )
 
 func main() {
@@ -18,7 +18,7 @@ func main() {
 
 	factory := commands.NewFactory(map[string]commands.Command{"ping": pingCommand})
 
-	http.HandleFunc("/", func(rw http.ResponseWriter, r *http.Request) {
+	http.HandleFunc("/cl4p-tp", func(rw http.ResponseWriter, r *http.Request) {
 		rw.Header().Add("Content-Type", "application/json")
 
 		response := struct {
@@ -32,17 +32,25 @@ func main() {
 		encoder.Encode(response)
 	})
 
-	http.HandleFunc("/interactions", func(rw http.ResponseWriter, r *http.Request) {
+	http.HandleFunc("/cl4p-tp/interactions", func(rw http.ResponseWriter, r *http.Request) {
 		rawBody, _ := ioutil.ReadAll(r.Body)
+
+		logger.Printf("Raw Body: %s", rawBody)
 
 		signature := r.Header.Get("X-Signature-Ed25519")
 
+		logger.Printf("Signature: %s", signature)
+
 		timestamp := r.Header.Get("X-Signature-Timestamp")
+
+		logger.Printf("Timestamp: %s", timestamp)
 
 		publicKey := os.Getenv("PUBLIC_KEY")
 
 		if !verify(signature, timestamp+string(rawBody), publicKey) {
 			rw.WriteHeader(http.StatusUnauthorized)
+
+			logger.Println("fails to verify signature")
 
 			return
 		}
@@ -94,7 +102,7 @@ func main() {
 
 	port := os.Getenv("PORT")
 
-	logger.Printf("starting cl4p-tp-slash-commands at %s\n", ":"+port)
+	logger.Printf("starting cl4p-tp at %s\n", ":"+port)
 
 	http.ListenAndServe(":"+port, nil)
 }
