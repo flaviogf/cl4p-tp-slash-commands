@@ -16,7 +16,7 @@ spec:
     spec:
       containers:
         - name: cl4p-tp
-          image: flaviogf/cl4p-tp:beta
+          image: flaviogf/cl4p-tp
           ports:
             - containerPort: 3000
           envFrom:
