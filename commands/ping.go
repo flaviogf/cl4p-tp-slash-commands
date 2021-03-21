@@ -3,18 +3,13 @@ package commands
 import (
 	"encoding/json"
 	"fmt"
-	"net/http"
 )
 
-type HttpClient interface {
-	Get(url string) (*http.Response, error)
-}
-
 type PingCommand struct {
-	http HttpClient
+	http Http
 }
 
-func NewPingCommand(http HttpClient) *PingCommand {
+func NewPingCommand(http Http) *PingCommand {
 	return &PingCommand{http}
 }
 
@@ -25,29 +20,30 @@ func (p *PingCommand) Execute(interaction Interaction) InteractionResponse {
 
 	url := interaction.Data.Options[0].Value
 
-	resp, err := http.Get(url)
+	resp, err := p.http.Get(url)
 
 	if err != nil {
-		return NewEmbedInteractionResponse(14500161, "Fail", err.Error())
+		return NewEmbedInteractionResponse(14500161, "Fail", "oops I couldn't reach your api")
 	}
 
 	decoder := json.NewDecoder(resp.Body)
 
-	body := struct {
-		Content    string `json:"content"`
-		StatusCode int    `json:"statusCode"`
-		Message    string `json:"message"`
-		IsSuccess  bool   `json:"isSuccess"`
-		Env        string `json:"env"`
+	data := struct {
+		Content    string   `json:"content"`
+		StatusCode int      `json:"statusCode"`
+		Message    string   `json:"message"`
+		IsSuccess  bool     `json:"isSuccess"`
+		Errors     []string `json:"errors"`
+		Env        string   `json:"env"`
 	}{}
 
-	err = decoder.Decode(&body)
+	err = decoder.Decode(&data)
 
 	if err != nil {
-		return NewEmbedInteractionResponse(14500161, "Fail", err.Error())
+		return NewEmbedInteractionResponse(14500161, "Fail", "oops I couldn't reach your api")
 	}
 
-	content, _ := json.MarshalIndent(body, "", "\t")
+	content, _ := json.MarshalIndent(data, "", "\t")
 
 	description := fmt.Sprintf("```json\n%s\n```", string(content))
 
