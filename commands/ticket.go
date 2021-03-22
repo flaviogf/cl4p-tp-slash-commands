@@ -49,5 +49,5 @@ func (t *TicketCommand) Execute(interaction Interaction) InteractionResponse {
 
 	description := fmt.Sprintf("**Subject:**\n%s\n\n**Status:**\n%s\n\n**Owner:**\n%s", data.Subject, data.Status, data.Owner.Name)
 
-	return NewEmbedInteractionResponse(4437377, "TICKET: "+id, description)
+	return NewEmbedInteractionResponse(4437377, id, description)
 }
