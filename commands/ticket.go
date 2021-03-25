@@ -7,21 +7,21 @@ import (
 
 type TicketCommand struct {
 	http Http
-	uri  string
+	url  string
 }
 
-func NewTicketCommand(http Http, uri string) *TicketCommand {
-	return &TicketCommand{http, uri}
+func NewTicketCommand(http Http, url string) *TicketCommand {
+	return &TicketCommand{http, url}
 }
 
 func (t *TicketCommand) Execute(interaction Interaction) InteractionResponse {
-	if len(interaction.Data.Options) == 0 {
+	if len(interaction.Data.Options) < 1 {
 		return NewEmbedInteractionResponse(14500161, "Fail", "you must specify an option")
 	}
 
 	id := interaction.Data.Options[0].Value
 
-	resp, err := t.http.Get(t.uri + id)
+	resp, err := t.http.Get(t.url + id)
 
 	if err != nil {
 		return NewEmbedInteractionResponse(14500161, "Fail", "oops I couldn't find this ticket")
