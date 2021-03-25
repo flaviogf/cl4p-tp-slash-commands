@@ -14,7 +14,7 @@ func NewPingCommand(http Http) *PingCommand {
 }
 
 func (p *PingCommand) Execute(interaction Interaction) InteractionResponse {
-	if len(interaction.Data.Options) == 0 {
+	if len(interaction.Data.Options) < 1 {
 		return NewEmbedInteractionResponse(14500161, "Fail", "you must specify an option")
 	}
 
