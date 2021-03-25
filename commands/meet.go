@@ -33,12 +33,12 @@ func (m *MeetCommand) Execute(interaction Interaction) InteractionResponse {
 
 	go func() {
 		for timeLeft := minutes; timeLeft > 0; timeLeft-- {
-			m.notify(15844367, fmt.Sprintf("Daily: %s", name), fmt.Sprintf("Length: %02d min - Left: %02d min", minutes, timeLeft))
+			m.notify(15844367, name, fmt.Sprintf("Length: %02d min - Left: %02d min", minutes, timeLeft))
 
 			time.Sleep(1 * time.Minute)
 		}
 
-		m.notify(14500161, fmt.Sprintf("Daily: %s", name), "Finish!")
+		m.notify(14500161, name, "Finish!")
 	}()
 
 	return NewEmbedInteractionResponse(4437377, name, "GO!")
