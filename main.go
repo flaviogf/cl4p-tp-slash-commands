@@ -16,7 +16,8 @@ import (
 func main() {
 	factory := commands.NewFactory(map[string]commands.Command{
 		"ping":   commands.NewPingCommand(http.DefaultClient),
-		"ticket": commands.NewTicketCommand(http.DefaultClient, os.Getenv("MOVIDESK_API")),
+		"ticket": commands.NewTicketCommand(http.DefaultClient, os.Getenv("MOVIDESK_API_URL")),
+		"meet":   commands.NewMeetCommand(http.DefaultClient, os.Getenv("DISCORD_WEBHOOK_URL")),
 	})
 
 	http.HandleFunc("/cl4p-tp", func(rw http.ResponseWriter, r *http.Request) {
