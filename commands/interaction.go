@@ -39,7 +39,8 @@ const (
 )
 
 type InteractionApplicationCommandCallbackData struct {
-	Embeds []Embed `json:"embeds"`
+	Content string  `json:"content,omitempty"`
+	Embeds  []Embed `json:"embeds,omitempty"`
 }
 
 type Embed struct {
@@ -50,6 +51,10 @@ type Embed struct {
 
 func NewPongInteractionResponse() InteractionResponse {
 	return InteractionResponse{Type: Pong}
+}
+
+func NewContentInteractionResponse(content string) InteractionResponse {
+	return InteractionResponse{Type: ChannelMessageWithSource, Data: InteractionApplicationCommandCallbackData{Content: content}}
 }
 
 func NewEmbedInteractionResponse(color int, title, description string) InteractionResponse {

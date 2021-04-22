@@ -15,9 +15,10 @@ import (
 
 func main() {
 	factory := commands.NewFactory(map[string]commands.Command{
-		"ping":   commands.NewPingCommand(http.DefaultClient),
-		"ticket": commands.NewTicketCommand(http.DefaultClient, os.Getenv("MOVIDESK_API_URL")),
-		"meet":   commands.NewMeetCommand(http.DefaultClient, os.Getenv("DISCORD_WEBHOOK_URL")),
+		"ping":       commands.NewPingCommand(http.DefaultClient),
+		"ticket":     commands.NewTicketCommand(http.DefaultClient, os.Getenv("MOVIDESK_API_URL")),
+		"meet":       commands.NewMeetCommand(http.DefaultClient, os.Getenv("DISCORD_WEBHOOK_URL")),
+		"agreements": commands.NewAgreementsCommand(),
 	})
 
 	http.HandleFunc("/cl4p-tp", func(rw http.ResponseWriter, r *http.Request) {
